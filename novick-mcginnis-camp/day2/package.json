@@ -1,5 +1,5 @@
 {
-  "name": "day1",
+  "name": "day2",
   "version": "0.1.0",
   "scripts": {
     "build": "bsb -make-world",
@@ -14,4 +14,4 @@
   "devDependencies": {
     "bs-platform": "^5.0.3"
   }
-  
+}

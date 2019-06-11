@@ -2,10 +2,8 @@
 'use strict';
 
 var Block = require("bs-platform/lib/js/block.js");
-var $$String = require("bs-platform/lib/js/string.js");
 var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
-var Caml_format = require("bs-platform/lib/js/caml_format.js");
-var Caml_string = require("bs-platform/lib/js/caml_string.js");
+var Caml_int32 = require("bs-platform/lib/js/caml_int32.js");
 
 console.log("Hello, BuckleScript and Reason!");
 
@@ -185,11 +183,10 @@ console.log(result);
 
 console.log("\nExercises");
 
-function exchange($$int) {
-  var inputAsString = String($$int);
-  var inputAsStringTuple_000 = $$String.make(1, Caml_string.get(inputAsString, 0));
-  var inputAsStringTuple_001 = $$String.make(1, Caml_string.get(inputAsString, 1));
-  return Caml_format.caml_int_of_string(inputAsStringTuple_001 + inputAsStringTuple_000);
+function exchange(num) {
+  var first = num / 10 | 0;
+  var second = num % 10;
+  return Caml_int32.imul(second, 10) + first | 0;
 }
 
 console.log(exchange(73));

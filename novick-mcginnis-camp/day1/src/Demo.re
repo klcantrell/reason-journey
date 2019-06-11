@@ -155,13 +155,17 @@ let result =
 Js.log(result);
 
 Js.log("\nExercises");
-let exchange = int => {
-  let inputAsString = int->string_of_int;
-  let inputAsStringTuple = (
-    inputAsString.[0] |> String.make(1),
-    inputAsString.[1] |> String.make(1),
-  );
-  let (a, b) = inputAsStringTuple;
-  int_of_string(b ++ a);
+// let exchange = int => {
+//   let inputAsString = int->string_of_int;
+//   let inputAsStringTuple = (
+//     inputAsString.[0] |> String.make(1),
+//     inputAsString.[1] |> String.make(1),
+//   );
+//   let (a, b) = inputAsStringTuple;
+//   int_of_string(b ++ a);
+// };
+let exchange = num => {
+  let (first, second) = (num / 10, num mod 10);
+  second * 10 + first;
 };
 Js.log(exchange(73));
