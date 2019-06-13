@@ -7,11 +7,15 @@ Js.log(
   ArraysToolbox.checkPangram("The quick brown fox jumps over the lazy dog"),
 );
 
-module Math = {
-  module Tools = {
-    let times = (x, y) => y * y;
-    let square = x => times(x, x);
-  };
+module type MathToolsInterface = {
+  let times: (int, int) => int;
+  let square: int => int;
+  let coolGreeting: string => string;
 };
 
-Js.log(Math.Tools.square(3));
+module Math: MathToolsInterface = {
+  include Hi;
+  let coolGreeting = str => yo(str);
+  let times = (x, y) => x * y;
+  let square = x => times(x, x);
+};
