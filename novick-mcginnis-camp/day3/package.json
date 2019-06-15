@@ -4,7 +4,8 @@
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w",
-    "clean": "bsb -clean-world"
+    "clean": "bsb -clean-world",
+    "dev": "webpack-dev-server"
   },
   "keywords": [
     "BuckleScript"
@@ -12,6 +13,11 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "bs-platform": "^5.0.3"
+    "bs-platform": "^5.0.3",
+    "webpack-cli": "^3.3.4",
+    "webpack": "^4.34.0"
+  },
+  "dependencies": {
+    "webpack-dev-server": "^3.7.1"
   }
 }
