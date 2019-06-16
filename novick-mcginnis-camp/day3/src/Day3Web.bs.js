@@ -2,6 +2,7 @@
 'use strict';
 
 var Curry = require("bs-platform/lib/js/curry.js");
+var Js_dict = require("bs-platform/lib/js/js_dict.js");
 
 console.log("sup");
 
@@ -31,8 +32,73 @@ const myRawVariable = 'sup'
 console.log(myRawVariable)
 ;
 
+var myTimeout = setTimeout((function (param) {
+        console.log("yo yo yo");
+        return /* () */0;
+      }), 1000);
+
+console.log(Math.random(23));
+
+console.log(window.location.ancestorOrigins.length);
+
+var jsMap = { };
+
+jsMap["Kal"] = "dude";
+
+console.log(jsMap);
+
+var match = Js_dict.get(personAge, "Kal");
+
+if (match !== undefined) {
+  console.log("Kal is " + String(match));
+} else {
+  console.log("Kal is not found");
+}
+
+console.log(getPerson().lastName);
+
+var myTestRecord = {
+  type: "hey",
+  test2: "there"
+};
+
+printTest(myTestRecord);
+
+var date = new Date();
+
+console.log(date);
+
+console.log(Math.random(23));
+
+function myPersonToJs(param) {
+  return {
+          birthDate: param[/* birthDate */0],
+          pet: param[/* pet */1],
+          married: param[/* married */2]
+        };
+}
+
+function myPersonFromJs(param) {
+  return /* record */[
+          /* birthDate */param.birthDate,
+          /* pet */param.pet,
+          /* married */param.married
+        ];
+}
+
+var personFromJs = myPersonFromJs(getMyPerson());
+
+console.log(personFromJs[/* married */2]);
+
 exports.world = world;
 exports.helloWorld = helloWorld;
 exports.exponent = exponent;
 exports.addFunction = addFunction;
+exports.myTimeout = myTimeout;
+exports.jsMap = jsMap;
+exports.myTestRecord = myTestRecord;
+exports.date = date;
+exports.myPersonToJs = myPersonToJs;
+exports.myPersonFromJs = myPersonFromJs;
+exports.personFromJs = personFromJs;
 /*  Not a pure module */
