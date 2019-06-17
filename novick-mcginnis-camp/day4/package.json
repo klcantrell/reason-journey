@@ -1,0 +1,27 @@
+{
+  "name": "day4",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "jest",
+    "dev": "webpack-dev-server"
+  },
+  "keywords": [
+    "BuckleScript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "bs-platform": "^5.0.3",
+    "webpack": "^4.34.0",
+    "webpack-cli": "^3.3.4",
+    "webpack-dev-server": "^3.7.1"
+  },
+  "dependencies": {
+    "@glennsl/bs-jest": "^0.4.8",
+    "@glennsl/bs-json": "^4.0.0",
+    "bs-fetch": "^0.4.0"
+  }
+}
