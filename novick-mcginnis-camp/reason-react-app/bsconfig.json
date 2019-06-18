@@ -1,8 +1,8 @@
 
 {
-  "name": "react-template",
+  "name": "react-hooks-template",
   "reason": {
-    "react-jsx": 2
+    "react-jsx": 3
   },
   "sources": {
     "dir" : "src",
