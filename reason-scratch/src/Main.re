@@ -1,3 +1,5 @@
+[@bs.module] external myExternalJs: unit = "./External";
+
 // PRACTICE WITH ARRAY PROCESSING
 
 let longest = (str1, str2) => {
@@ -55,7 +57,7 @@ Js.log(
 // POKEMON
 
 [@bs.deriving {jsConverter: newType}]
-type pokemonTypes = [ | [@bs.as "ELECTRIC"] `Electric | `Fire];
+type pokemonTypes = [ | [@bs.as "ELECTRIC"] `Electric | [@bs.as "FIRE"] `Fire];
 
 [@bs.deriving abstract]
 type pokemonUntyped = {
@@ -72,7 +74,8 @@ type pokemon = {
   level: int,
 };
 
-[@bs.val] external pokemonData: Js.Array.t(pokemonUntyped) = "pokemon";
+[@bs.module "./External"]
+external pokemonData: Js.Array.t(pokemonUntyped) = "pokemon";
 
 // JS INTEROP HELPERS
 
@@ -104,7 +107,7 @@ let formatPokemonForJs = rePokemon => {
 
 let pokemonDataTyped = bringInPokemonFromJs(pokemonData);
 
-Js.log("[Reason]: Electric pokemon with level greater than 70");
+Js.log("[Reason]: Process Pokemon");
 Js.log(
   pokemonDataTyped
   |> Js.Array.filter(
@@ -113,4 +116,35 @@ Js.log(
        | _ => false,
      )
   |> formatPokemonForJs,
+);
+
+// Reason React
+
+let str = ReasonReact.string;
+let filter = Js.Array.filter;
+let map = Js.Array.map;
+
+module App = {
+  [@react.component]
+  let make = (~pokemon) => {
+    <div>
+      <h2> {str("Reason React")} </h2>
+      {React.array(
+         pokemon
+         |> filter(
+              fun
+              | {name: _, level, _type: `Electric | `Fire}
+                  when level > 70 || level < 10 =>
+                true
+              | _ => false,
+            )
+         |> map(p => <div key={p.name}> {str(p.name)} </div>),
+       )}
+    </div>;
+  };
+};
+
+ReactDOMRe.renderToElementWithId(
+  <App pokemon=pokemonDataTyped />,
+  "reason-app",
 );

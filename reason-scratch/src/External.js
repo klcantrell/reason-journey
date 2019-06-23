@@ -1,3 +1,6 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 // QUESTIONS
 
 // const QUESTION_STATE = {
@@ -105,17 +108,51 @@ const POKEMON_TYPES = {
   FIRE: 'FIRE',
 };
 
-const pokemon = [
+export const pokemon = [
   {
     name: 'Pikachu',
     type: POKEMON_TYPES.ELECTRIC,
     level: 88,
   },
+  {
+    name: 'Zapdos',
+    type: POKEMON_TYPES.ELECTRIC,
+    level: 50,
+  },
+  {
+    name: 'Charmander',
+    type: POKEMON_TYPES.FIRE,
+    level: 5,
+  },
 ];
 
-console.log('[JS]: Electric pokemon with level greater than 70');
+console.log('[JS]: Process Pokemon');
 console.log(
   pokemon.filter(p => {
-    return p.type === POKEMON_TYPES.ELECTRIC && p.level > 70;
+    return (
+      (p.type === POKEMON_TYPES.ELECTRIC && p.level > 70) ||
+      (p.type === POKEMON_TYPES.FIRE && p.level < 10)
+    );
   })
 );
+
+// REACT
+
+const App = ({ pokemon }) => (
+  <div>
+    <h2>Vanilla React</h2>
+    {pokemon
+      .filter(p => {
+        return (
+          (p.type === POKEMON_TYPES.ELECTRIC ||
+            p.type === POKEMON_TYPES.FIRE) &&
+          (p.level > 70 || p.level < 10)
+        );
+      })
+      .map(p => {
+        return <div key={p.name}>{p.name}</div>;
+      })}
+  </div>
+);
+
+ReactDOM.render(<App pokemon={pokemon} />, document.getElementById('js-app'));
