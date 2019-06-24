@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import './main.css';
+
 // QUESTIONS
 
 // const QUESTION_STATE = {
@@ -113,33 +115,29 @@ export const pokemon = [
     name: 'Pikachu',
     type: POKEMON_TYPES.ELECTRIC,
     level: 88,
+    image:
+      'https://static.giantbomb.com/uploads/scale_small/0/6087/2437349-pikachu.png',
   },
   {
     name: 'Zapdos',
     type: POKEMON_TYPES.ELECTRIC,
     level: 50,
+    image:
+      'https://static.giantbomb.com/uploads/scale_small/13/135472/1892691-145zapdos.png',
   },
   {
     name: 'Charmander',
     type: POKEMON_TYPES.FIRE,
     level: 5,
+    image:
+      'https://static.giantbomb.com/uploads/scale_small/13/135472/1891761-004charmander.png',
   },
 ];
-
-console.log('[JS]: Process Pokemon');
-console.log(
-  pokemon.filter(p => {
-    return (
-      (p.type === POKEMON_TYPES.ELECTRIC && p.level > 70) ||
-      (p.type === POKEMON_TYPES.FIRE && p.level < 10)
-    );
-  })
-);
 
 // REACT
 
 const App = ({ pokemon }) => (
-  <div>
+  <div className="react-app app">
     <h2>Vanilla React</h2>
     {pokemon
       .filter(p => {
@@ -150,7 +148,12 @@ const App = ({ pokemon }) => (
         );
       })
       .map(p => {
-        return <div key={p.name}>{p.name}</div>;
+        return (
+          <figure key={p.name} className="pokemon">
+            <img src={p.image} />
+            <figcaption>{p.name}</figcaption>
+          </figure>
+        );
       })}
   </div>
 );

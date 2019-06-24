@@ -72,7 +72,8 @@ function pokemonToJs(param) {
   return {
           name: param[/* name */0],
           type: param[/* _type */1],
-          level: param[/* level */2]
+          level: param[/* level */2],
+          image: param[/* image */3]
         };
 }
 
@@ -80,7 +81,8 @@ function pokemonFromJs(param) {
   return /* record */[
           /* name */param.name,
           /* _type */param.type,
-          /* level */param.level
+          /* level */param.level,
+          /* image */param.image
         ];
 }
 
@@ -91,7 +93,8 @@ function bringInPokemonFromJs(jsPokemon) {
                 return /* record */[
                         /* name */pokemon.name,
                         /* _type */pokemonTypesFromJs(pokemon.type),
-                        /* level */pokemon.level
+                        /* level */pokemon.level,
+                        /* image */pokemon.image
                       ];
               }));
 }
@@ -101,22 +104,13 @@ function formatPokemonForJs(rePokemon) {
                 return {
                         name: pokemon[/* name */0],
                         type: pokemonTypesToJs(pokemon[/* _type */1]),
-                        level: pokemon[/* level */2]
+                        level: pokemon[/* level */2],
+                        image: pokemon[/* image */3]
                       };
               }));
 }
 
 var pokemonDataTyped = bringInPokemonFromJs(pokemonData);
-
-console.log("[Reason]: Process Pokemon");
-
-console.log(formatPokemonForJs(pokemonDataTyped.filter((function (param) {
-                if (param[/* _type */1] !== 627136509) {
-                  return false;
-                } else {
-                  return param[/* level */2] > 70;
-                }
-              }))));
 
 function str(prim) {
   return prim;
@@ -140,10 +134,15 @@ function Main$App(Props) {
             return level < 10;
           }
         }));
-  return React.createElement("div", undefined, React.createElement("h2", undefined, "Reason React"), prim.map((function (p) {
-                    return React.createElement("div", {
-                                key: p[/* name */0]
-                              }, p[/* name */0]);
+  return React.createElement("div", {
+              className: "reason-app app"
+            }, React.createElement("h2", undefined, "Reason React"), prim.map((function (p) {
+                    return React.createElement("figure", {
+                                key: p[/* name */0],
+                                className: "pokemon"
+                              }, React.createElement("img", {
+                                    src: p[/* image */3]
+                                  }), React.createElement("figcaption", undefined, p[/* name */0]));
                   })));
 }
 

@@ -65,6 +65,7 @@ type pokemonUntyped = {
   [@bs.as "type"]
   _type: abs_pokemonTypes,
   level: int,
+  image: string,
 };
 
 [@bs.deriving {jsConverter: newType}]
@@ -72,6 +73,7 @@ type pokemon = {
   name: string,
   _type: pokemonTypes,
   level: int,
+  image: string,
 };
 
 [@bs.module "./External"]
@@ -87,6 +89,7 @@ let bringInPokemonFromJs = jsPokemon => {
            name: pokemon->nameGet,
            level: pokemon->levelGet,
            _type: pokemonTypesFromJs(pokemon->_typeGet),
+           image: pokemon->imageGet,
          }: pokemon
        )
      );
@@ -100,23 +103,13 @@ let formatPokemonForJs = rePokemon => {
            ~name=pokemon.name,
            ~level=pokemon.level,
            ~_type=pokemonTypesToJs(pokemon._type),
+           ~image=pokemon.image,
          ): pokemonUntyped
        )
      );
 };
 
 let pokemonDataTyped = bringInPokemonFromJs(pokemonData);
-
-Js.log("[Reason]: Process Pokemon");
-Js.log(
-  pokemonDataTyped
-  |> Js.Array.filter(
-       fun
-       | {name: _, level, _type: `Electric} when level > 70 => true
-       | _ => false,
-     )
-  |> formatPokemonForJs,
-);
 
 // Reason React
 
@@ -127,7 +120,7 @@ let map = Js.Array.map;
 module App = {
   [@react.component]
   let make = (~pokemon) => {
-    <div>
+    <div className="reason-app app">
       <h2> {str("Reason React")} </h2>
       {React.array(
          pokemon
@@ -138,7 +131,12 @@ module App = {
                 true
               | _ => false,
             )
-         |> map(p => <div key={p.name}> {str(p.name)} </div>),
+         |> map(p =>
+              <figure key={p.name} className="pokemon">
+                <img src={p.image} />
+                <figcaption> {str(p.name)} </figcaption>
+              </figure>
+            ),
        )}
     </div>;
   };
