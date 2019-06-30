@@ -3,35 +3,20 @@
 
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
-var Pervasives = require("bs-platform/lib/js/pervasives.js");
 
 function str(prim) {
   return prim;
 }
 
-function floatMultiplied($$float) {
-  return $$float * 10000000.00;
-}
-
-function intDivided($$int) {
-  return $$int / 10000000 | 0;
-}
-
-function randomFloat(param) {
-  return (Math.random() * 10000000.00 | 0) / 10000000 | 0;
-}
-
 function App(Props) {
-  var match = React.useState((function () {
-          return /* record */[/* number */0.0];
-        }));
-  var setState = match[1];
-  var numberToDisplay = Pervasives.string_of_float(match[0][/* number */0]);
+  var match = React.useReducer((function (param, action) {
+          return /* record */[/* number */Math.random()];
+        }), /* record */[/* number */0.0]);
+  var dispatch = match[1];
+  var numberToDisplay = match[0][/* number */0].toString();
   return React.createElement("div", undefined, React.createElement("div", undefined, numberToDisplay), React.createElement("button", {
-                  onClick: (function (e) {
-                      return Curry._1(setState, (function (param) {
-                                    return /* record */[/* number */Math.random()];
-                                  }));
+                  onClick: (function (param) {
+                      return Curry._1(dispatch, /* GetRandom */0);
                     })
                 }, "Random number, please"));
 }
@@ -39,8 +24,5 @@ function App(Props) {
 var make = App;
 
 exports.str = str;
-exports.floatMultiplied = floatMultiplied;
-exports.intDivided = intDivided;
-exports.randomFloat = randomFloat;
 exports.make = make;
 /* react Not a pure module */
