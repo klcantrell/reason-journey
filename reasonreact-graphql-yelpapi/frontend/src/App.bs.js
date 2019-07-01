@@ -14,7 +14,16 @@ function str(prim) {
   return prim;
 }
 
-var ppx_printed_query = "query getMexicanRestaurant($location: String, $limit: Int, $offset: Int)  {\nsearch(location: $location, limit: $limit, offset: $offset)  {\ntotal  \nbusiness  {\nname  \n}\n\n}\n\n}\n";
+function App$RestaurantCard(Props) {
+  var info = Props.info;
+  return React.createElement("div", undefined, React.createElement("p", undefined, info[/* name */0]), React.createElement("img", {
+                  src: info[/* url */1]
+                }));
+}
+
+var RestaurantCard = /* module */[/* make */App$RestaurantCard];
+
+var ppx_printed_query = "query getMexicanRestaurant($location: String, $limit: Int, $offset: Int)  {\nsearch(location: $location, limit: $limit, offset: $offset)  {\ntotal  \nbusiness  {\nname  \nphotos  \n}\n\n}\n\n}\n";
 
 function parse(value) {
   var match = Js_json.decodeObject(value);
@@ -62,22 +71,46 @@ function parse(value) {
                           var match$1 = Js_json.decodeObject(value);
                           var tmp;
                           if (match$1 !== undefined) {
-                            var match$2 = Js_dict.get(Caml_option.valFromOption(match$1), "name");
+                            var value$1 = Caml_option.valFromOption(match$1);
+                            var match$2 = Js_dict.get(value$1, "name");
                             var tmp$1;
                             if (match$2 !== undefined) {
-                              var value$1 = Caml_option.valFromOption(match$2);
-                              var match$3 = Js_json.decodeNull(value$1);
+                              var value$2 = Caml_option.valFromOption(match$2);
+                              var match$3 = Js_json.decodeNull(value$2);
                               if (match$3 !== undefined) {
                                 tmp$1 = undefined;
                               } else {
-                                var match$4 = Js_json.decodeString(value$1);
-                                tmp$1 = match$4 !== undefined ? match$4 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(value$1));
+                                var match$4 = Js_json.decodeString(value$2);
+                                tmp$1 = match$4 !== undefined ? match$4 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(value$2));
                               }
                             } else {
                               tmp$1 = undefined;
                             }
+                            var match$5 = Js_dict.get(value$1, "photos");
+                            var tmp$2;
+                            if (match$5 !== undefined) {
+                              var value$3 = Caml_option.valFromOption(match$5);
+                              var match$6 = Js_json.decodeNull(value$3);
+                              if (match$6 !== undefined) {
+                                tmp$2 = undefined;
+                              } else {
+                                var match$7 = Js_json.decodeArray(value$3);
+                                tmp$2 = match$7 !== undefined ? match$7.map((function (value) {
+                                          var match = Js_json.decodeNull(value);
+                                          if (match !== undefined) {
+                                            return undefined;
+                                          } else {
+                                            var match$1 = Js_json.decodeString(value);
+                                            return match$1 !== undefined ? match$1 : Js_exn.raiseError("graphql_ppx: Expected string, got " + JSON.stringify(value));
+                                          }
+                                        })) : Js_exn.raiseError("graphql_ppx: Expected array, got " + JSON.stringify(value$3));
+                              }
+                            } else {
+                              tmp$2 = undefined;
+                            }
                             tmp = {
-                              name: tmp$1
+                              name: tmp$1,
+                              photos: tmp$2
                             };
                           } else {
                             tmp = Js_exn.raiseError("graphql_ppx: Object is not a value");
@@ -187,14 +220,21 @@ function App(Props) {
                   if (typeof result === "number") {
                     return React.createElement("div", undefined, "Loading...");
                   } else if (result.tag) {
-                    return React.createElement("div", undefined, Belt_Option.mapWithDefault(Belt_Option.flatMap(Belt_Option.flatMap(Belt_Option.flatMap(result[0].search, (function (search) {
-                                                  return search.business;
-                                                })), (function (businesses) {
-                                              return Caml_array.caml_array_get(businesses, 0);
-                                            })), (function (business) {
-                                          return business.name;
-                                        })), null, (function (name) {
-                                      return name;
+                    return React.createElement("div", undefined, Belt_Option.mapWithDefault(Belt_Option.flatMap(Belt_Option.flatMap(result[0].search, (function (search) {
+                                              return search.business;
+                                            })), (function (businesses) {
+                                          return Caml_array.caml_array_get(businesses, 0);
+                                        })), null, (function (business) {
+                                      var businessName = Belt_Option.getWithDefault(business.name, "");
+                                      var photos = Belt_Option.getWithDefault(business.photos, /* array */[]);
+                                      var firstPhoto = Belt_Option.getWithDefault(Caml_array.caml_array_get(photos, 0), "");
+                                      var info = /* record */[
+                                        /* name */businessName,
+                                        /* url */firstPhoto
+                                      ];
+                                      return React.createElement(App$RestaurantCard, {
+                                                  info: info
+                                                });
                                     })));
                   } else {
                     return React.createElement("div", undefined, result[0].message);
@@ -206,6 +246,7 @@ function App(Props) {
 var make$1 = App;
 
 exports.str = str;
+exports.RestaurantCard = RestaurantCard;
 exports.GetMexicanRestaurant = GetMexicanRestaurant;
 exports.GetMexicanRestaurantQuery = GetMexicanRestaurantQuery;
 exports.make = make$1;

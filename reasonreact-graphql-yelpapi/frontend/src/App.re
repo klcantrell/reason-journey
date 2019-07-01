@@ -1,5 +1,17 @@
 let str = ReasonReact.string;
 
+type restaurantInfo = {
+  name: string,
+  url: string,
+};
+
+module RestaurantCard = {
+  [@react.component]
+  let make = (~info) => {
+    <div> <p> {str(info.name)} </p> <img src={info.url} /> </div>;
+  };
+};
+
 module GetMexicanRestaurant = [%graphql
   {|
   query getMexicanRestaurant($location: String, $limit: Int, $offset: Int) {
@@ -7,6 +19,7 @@ module GetMexicanRestaurant = [%graphql
       total
       business {
         name
+        photos
       }
     }
   }
@@ -49,8 +62,19 @@ let make = () => {
            {response##search
             ->Belt.Option.flatMap(search => search##business)
             ->Belt.Option.flatMap(businesses => businesses[0])
-            ->Belt.Option.flatMap(business => business##name)
-            ->Belt.Option.mapWithDefault(React.null, name => str(name))}
+            ->Belt.Option.mapWithDefault(
+                React.null,
+                business => {
+                  let businessName =
+                    business##name->Belt.Option.getWithDefault("");
+                  let firstPhoto =
+                    business##photos
+                    ->Belt.Option.getWithDefault([||])
+                    ->(photos => photos[0]->Belt.Option.getWithDefault(""));
+                  let info = {name: businessName, url: firstPhoto};
+                  <RestaurantCard info />;
+                },
+              )}
          </div>
        }}
   </GetMexicanRestaurantQuery>;
