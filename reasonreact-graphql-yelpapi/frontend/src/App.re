@@ -1,81 +1,19 @@
 let str = ReasonReact.string;
 
-type restaurantInfo = {
-  name: string,
-  url: string,
-};
-
-module RestaurantCard = {
-  [@react.component]
-  let make = (~info) => {
-    <div> <p> {str(info.name)} </p> <img src={info.url} /> </div>;
-  };
-};
-
-module GetMexicanRestaurant = [%graphql
-  {|
-  query getMexicanRestaurant($location: String, $limit: Int, $offset: Int) {
-    search(location: $location, limit: $limit, offset: $offset) {
-      total
-      business {
-        name
-        photos
-      }
-    }
-  }
-|}
-];
-
-module GetMexicanRestaurantQuery =
-  ReasonApollo.CreateQuery(GetMexicanRestaurant);
-
 type actions =
-  | GetRandom;
+  | AddRestaurant;
 
-type state = {number: float};
+type state = {restaurants: array(React.element)};
 
 [@react.component]
 let make = () => {
-  let (state, dispatch) =
+  let ({restaurants}, _) =
     React.useReducer(
       (_, action) =>
         switch (action) {
-        | GetRandom => {number: 0.0}
+        | AddRestaurant => {restaurants: [|React.null|]}
         },
-      {number: 0.0},
+      {restaurants: [|<MexicanRestaurant key="0" />|]},
     );
-  let mexicanRestaurantQuery =
-    GetMexicanRestaurant.make(
-      ~location="indianapolis",
-      ~limit=1,
-      ~offset=1,
-      (),
-    );
-
-  <GetMexicanRestaurantQuery variables=mexicanRestaurantQuery##variables>
-    {({result}) =>
-       switch (result) {
-       | Loading => <div> {str("Loading...")} </div>
-       | Error(error) => <div> {str(error##message)} </div>
-       | Data(response) =>
-         <div>
-           {response##search
-            ->Belt.Option.flatMap(search => search##business)
-            ->Belt.Option.flatMap(businesses => businesses[0])
-            ->Belt.Option.mapWithDefault(
-                React.null,
-                business => {
-                  let businessName =
-                    business##name->Belt.Option.getWithDefault("");
-                  let firstPhoto =
-                    business##photos
-                    ->Belt.Option.getWithDefault([||])
-                    ->(photos => photos[0]->Belt.Option.getWithDefault(""));
-                  let info = {name: businessName, url: firstPhoto};
-                  <RestaurantCard info />;
-                },
-              )}
-         </div>
-       }}
-  </GetMexicanRestaurantQuery>;
+  <div> restaurants->ReasonReact.array </div>;
 };
