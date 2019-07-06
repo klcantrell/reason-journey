@@ -16,14 +16,16 @@ function str(prim) {
 
 function MexicanRestaurant$RestaurantCard(Props) {
   var info = Props.info;
-  return React.createElement("div", undefined, React.createElement("p", undefined, info[/* name */0]), React.createElement("img", {
+  return React.createElement("div", {
+              className: "restaurant-card"
+            }, React.createElement("p", undefined, info[/* name */0]), React.createElement("img", {
                   src: info[/* url */1]
                 }));
 }
 
 var RestaurantCard = /* module */[/* make */MexicanRestaurant$RestaurantCard];
 
-var ppx_printed_query = "query getMexicanRestaurant($location: String, $limit: Int, $offset: Int)  {\nsearch(location: $location, limit: $limit, offset: $offset)  {\ntotal  \nbusiness  {\nname  \nphotos  \n}\n\n}\n\n}\n";
+var ppx_printed_query = "query getMexicanRestaurant($location: String, $term: String, $limit: Int, $offset: Int)  {\nsearch(location: $location, term: $term, limit: $limit, offset: $offset)  {\ntotal  \nbusiness  {\nname  \nphotos  \n}\n\n}\n\n}\n";
 
 function parse(value) {
   var match = Js_json.decodeObject(value);
@@ -142,13 +144,17 @@ function parse(value) {
   }
 }
 
-function make($$location, limit, offset, param) {
+function make($$location, term, limit, offset, param) {
   return {
           query: ppx_printed_query,
           variables: Js_dict.fromArray(/* array */[
                 /* tuple */[
                   "location",
                   $$location !== undefined ? $$location : null
+                ],
+                /* tuple */[
+                  "term",
+                  term !== undefined ? term : null
                 ],
                 /* tuple */[
                   "limit",
@@ -165,6 +171,7 @@ function make($$location, limit, offset, param) {
 
 function makeWithVariables(variables) {
   var $$location = variables.location;
+  var term = variables.term;
   var limit = variables.limit;
   var offset = variables.offset;
   return {
@@ -173,6 +180,10 @@ function makeWithVariables(variables) {
                 /* tuple */[
                   "location",
                   $$location !== undefined ? $$location : null
+                ],
+                /* tuple */[
+                  "term",
+                  term !== undefined ? term : null
                 ],
                 /* tuple */[
                   "limit",
@@ -209,7 +220,8 @@ var GetMexicanRestaurantQuery = ReasonApollo.CreateQuery([
     ]);
 
 function MexicanRestaurant(Props) {
-  var mexicanRestaurantQuery = make("indianapolis", 1, 1, /* () */0);
+  var searchOffset = Props.searchOffset;
+  var mexicanRestaurantQuery = make("indianapolis", "mexican", 1, searchOffset, /* () */0);
   return React.createElement(GetMexicanRestaurantQuery[/* make */4], {
               variables: mexicanRestaurantQuery.variables,
               children: (function (param) {
@@ -217,22 +229,22 @@ function MexicanRestaurant(Props) {
                   if (typeof result === "number") {
                     return React.createElement("div", undefined, "Loading...");
                   } else if (result.tag) {
-                    return React.createElement("div", undefined, Belt_Option.mapWithDefault(Belt_Option.flatMap(Belt_Option.flatMap(result[0].search, (function (search) {
-                                              return search.business;
-                                            })), (function (businesses) {
-                                          return Caml_array.caml_array_get(businesses, 0);
-                                        })), null, (function (business) {
-                                      var businessName = Belt_Option.getWithDefault(business.name, "");
-                                      var photos = Belt_Option.getWithDefault(business.photos, /* array */[]);
-                                      var firstPhoto = Belt_Option.getWithDefault(Caml_array.caml_array_get(photos, 0), "");
-                                      var info = /* record */[
-                                        /* name */businessName,
-                                        /* url */firstPhoto
-                                      ];
-                                      return React.createElement(MexicanRestaurant$RestaurantCard, {
-                                                  info: info
-                                                });
-                                    })));
+                    return Belt_Option.mapWithDefault(Belt_Option.flatMap(Belt_Option.flatMap(result[0].search, (function (search) {
+                                          return search.business;
+                                        })), (function (businesses) {
+                                      return Caml_array.caml_array_get(businesses, 0);
+                                    })), null, (function (business) {
+                                  var businessName = Belt_Option.getWithDefault(business.name, "");
+                                  var photos = Belt_Option.getWithDefault(business.photos, /* array */[]);
+                                  var firstPhoto = Belt_Option.getWithDefault(Caml_array.caml_array_get(photos, 0), "");
+                                  var info = /* record */[
+                                    /* name */businessName,
+                                    /* url */firstPhoto
+                                  ];
+                                  return React.createElement(MexicanRestaurant$RestaurantCard, {
+                                              info: info
+                                            });
+                                }));
                   } else {
                     return React.createElement("div", undefined, result[0].message);
                   }

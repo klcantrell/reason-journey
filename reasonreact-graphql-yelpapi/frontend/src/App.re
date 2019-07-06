@@ -1,4 +1,5 @@
 let str = ReasonReact.string;
+let arr = ReasonReact.array;
 
 type actions =
   | AddRestaurant;
@@ -7,13 +8,32 @@ type state = {restaurants: array(React.element)};
 
 [@react.component]
 let make = () => {
-  let ({restaurants}, _) =
+  let ({restaurants}, dispatch) =
     React.useReducer(
-      (_, action) =>
+      (state, action) =>
         switch (action) {
-        | AddRestaurant => {restaurants: [|React.null|]}
+        | AddRestaurant =>
+          let nextMexicanRestaurantOffset =
+            state.restaurants->Array.length + 1;
+          {
+            restaurants:
+              Array.append(
+                state.restaurants,
+                [|
+                  <MexicanRestaurant
+                    key={nextMexicanRestaurantOffset->Js.Int.toString}
+                    searchOffset=nextMexicanRestaurantOffset
+                  />,
+                |],
+              ),
+          };
         },
-      {restaurants: [|<MexicanRestaurant key="0" />|]},
+      {restaurants: [|<MexicanRestaurant key="0" searchOffset=0 />|]},
     );
-  <div> restaurants->ReasonReact.array </div>;
+  <div className="main">
+    <button onClick={_ => dispatch(AddRestaurant)}>
+      "Add Restaurant"->str
+    </button>
+    <div className="restaurants"> restaurants->arr </div>
+  </div>;
 };

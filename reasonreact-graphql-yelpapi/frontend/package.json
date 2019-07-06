@@ -17,7 +17,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "css-loader": "^3.0.0",
     "dotenv": "^8.0.0",
+    "mini-css-extract-plugin": "^0.7.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "reason-apollo": "^0.16.4",

@@ -8,14 +8,17 @@ type restaurantInfo = {
 module RestaurantCard = {
   [@react.component]
   let make = (~info) => {
-    <div> <p> {str(info.name)} </p> <img src={info.url} /> </div>;
+    <div className="restaurant-card">
+      <p> {str(info.name)} </p>
+      <img src={info.url} />
+    </div>;
   };
 };
 
 module GetMexicanRestaurant = [%graphql
   {|
-  query getMexicanRestaurant($location: String, $limit: Int, $offset: Int) {
-    search(location: $location, limit: $limit, offset: $offset) {
+  query getMexicanRestaurant($location: String, $term: String, $limit: Int, $offset: Int) {
+    search(location: $location, term: $term, limit: $limit, offset: $offset) {
       total
       business {
         name
@@ -30,12 +33,13 @@ module GetMexicanRestaurantQuery =
   ReasonApollo.CreateQuery(GetMexicanRestaurant);
 
 [@react.component]
-let make = () => {
+let make = (~searchOffset: int) => {
   let mexicanRestaurantQuery =
     GetMexicanRestaurant.make(
       ~location="indianapolis",
+      ~term="mexican",
       ~limit=1,
-      ~offset=1,
+      ~offset=searchOffset,
       (),
     );
 
@@ -45,24 +49,22 @@ let make = () => {
        | Loading => <div> {str("Loading...")} </div>
        | Error(error) => <div> {str(error##message)} </div>
        | Data(response) =>
-         <div>
-           {response##search
-            ->Belt.Option.flatMap(search => search##business)
-            ->Belt.Option.flatMap(businesses => businesses[0])
-            ->Belt.Option.mapWithDefault(
-                React.null,
-                business => {
-                  let businessName =
-                    business##name->Belt.Option.getWithDefault("");
-                  let firstPhoto =
-                    business##photos
-                    ->Belt.Option.getWithDefault([||])
-                    ->(photos => photos[0]->Belt.Option.getWithDefault(""));
-                  let info = {name: businessName, url: firstPhoto};
-                  <RestaurantCard info />;
-                },
-              )}
-         </div>
+         response##search
+         ->Belt.Option.flatMap(search => search##business)
+         ->Belt.Option.flatMap(businesses => businesses[0])
+         ->Belt.Option.mapWithDefault(
+             React.null,
+             business => {
+               let businessName =
+                 business##name->Belt.Option.getWithDefault("");
+               let firstPhoto =
+                 business##photos
+                 ->Belt.Option.getWithDefault([||])
+                 ->(photos => photos[0]->Belt.Option.getWithDefault(""));
+               let info = {name: businessName, url: firstPhoto};
+               <RestaurantCard info />;
+             },
+           )
        }}
   </GetMexicanRestaurantQuery>;
 };

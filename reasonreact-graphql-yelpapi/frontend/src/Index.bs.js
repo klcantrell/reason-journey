@@ -2,6 +2,7 @@
 'use strict';
 
 var React = require("react");
+var MainCss = require("./main.css");
 var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
 var ReactApollo = require("react-apollo");
 var App$ReactHooksTemplate = require("./App.bs.js");
@@ -12,4 +13,7 @@ ReactDOMRe.renderToElementWithId(React.createElement(ReactApollo.ApolloProvider,
           children: React.createElement(App$ReactHooksTemplate.make, { })
         }), "app");
 
+var styles = /* () */0;
+
+exports.styles = styles;
 /*  Not a pure module */
