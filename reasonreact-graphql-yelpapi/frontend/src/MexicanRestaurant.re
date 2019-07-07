@@ -7,8 +7,9 @@ type restaurantInfo = {
 
 module RestaurantCard = {
   [@react.component]
-  let make = (~info) => {
+  let make = (~info: restaurantInfo, ~onExitClick: unit => unit) => {
     <div className="restaurant-card">
+      <i onClick={e => onExitClick()}> {str("X")} </i>
       <p> {str(info.name)} </p>
       <img src={info.url} />
     </div>;
@@ -33,7 +34,7 @@ module GetMexicanRestaurantQuery =
   ReasonApollo.CreateQuery(GetMexicanRestaurant);
 
 [@react.component]
-let make = (~searchOffset: int) => {
+let make = (~searchOffset: int, ~onExitClick: unit => unit) => {
   let mexicanRestaurantQuery =
     GetMexicanRestaurant.make(
       ~location="indianapolis",
@@ -46,25 +47,30 @@ let make = (~searchOffset: int) => {
   <GetMexicanRestaurantQuery variables=mexicanRestaurantQuery##variables>
     {({result}) =>
        switch (result) {
-       | Loading => <div> {str("Loading...")} </div>
-       | Error(error) => <div> {str(error##message)} </div>
+       | Loading =>
+         <div className="restaurant-card"> <p> {str("Loading...")} </p> </div>
+       | Error(error) =>
+         <div className="restaurant-card">
+           <p> {str(error##message)} </p>
+         </div>
        | Data(response) =>
-         response##search
-         ->Belt.Option.flatMap(search => search##business)
-         ->Belt.Option.flatMap(businesses => businesses[0])
-         ->Belt.Option.mapWithDefault(
-             React.null,
-             business => {
-               let businessName =
-                 business##name->Belt.Option.getWithDefault("");
-               let firstPhoto =
-                 business##photos
-                 ->Belt.Option.getWithDefault([||])
-                 ->(photos => photos[0]->Belt.Option.getWithDefault(""));
-               let info = {name: businessName, url: firstPhoto};
-               <RestaurantCard info />;
-             },
-           )
+         Belt.Option.(
+           response##search
+           ->flatMap(search => search##business)
+           ->flatMap(businesses => businesses[0])
+           ->mapWithDefault(
+               React.null,
+               business => {
+                 let businessName = business##name->getWithDefault("");
+                 let firstPhoto =
+                   business##photos
+                   ->getWithDefault([||])
+                   ->(photos => photos[0]->getWithDefault(""));
+                 let info = {name: businessName, url: firstPhoto};
+                 <RestaurantCard info onExitClick />;
+               },
+             )
+         )
        }}
   </GetMexicanRestaurantQuery>;
 };
