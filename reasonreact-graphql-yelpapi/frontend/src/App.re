@@ -1,17 +1,12 @@
 let str = ReasonReact.string;
 let arr = ReasonReact.array;
 
-type restaurantComponent = {
-  key: int,
-  el: React.element,
-};
-
 type actions =
-  | AddRestaurant(restaurantComponent)
+  | AddRestaurant(MexicanRestaurant.restaurantComponent)
   | RemoveRestaurant(int);
 
 type state = {
-  restaurants: array(restaurantComponent),
+  restaurants: array(MexicanRestaurant.restaurantComponent),
   nextOffset: int,
 };
 
@@ -30,7 +25,10 @@ let make = () => {
             ...state,
             restaurants:
               state.restaurants
-              |> Js.Array.filter(restaurant => restaurant.key !== key),
+              |> Js.Array.filter(
+                   (restaurant: MexicanRestaurant.restaurantComponent) =>
+                   restaurant.key !== key
+                 ),
           }
         },
       {restaurants: [||], nextOffset: 0},
@@ -67,7 +65,10 @@ let make = () => {
       {str("Add Restaurant")}
     </button>
     <div className="restaurants">
-      {arr(restaurants |> Js.Array.map(r => r.el))}
+      {arr(
+         restaurants
+         |> Js.Array.map((r: MexicanRestaurant.restaurantComponent) => r.el),
+       )}
     </div>
   </div>;
 };

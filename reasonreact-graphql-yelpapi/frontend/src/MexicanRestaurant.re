@@ -5,6 +5,11 @@ type restaurantInfo = {
   url: string,
 };
 
+type restaurantComponent = {
+  key: int,
+  el: React.element,
+};
+
 module RestaurantCard = {
   [@react.component]
   let make = (~info: restaurantInfo, ~onExitClick: unit => unit) => {
