@@ -152,6 +152,38 @@ ReactDOMRe.renderToElementWithId(React.createElement(Main$App, {
           pokemon: pokemonDataTyped
         }), "reason-app");
 
+function let_(promise, $$continue) {
+  return promise.then(Curry.__1($$continue));
+}
+
+var Async = /* module */[/* let_ */let_];
+
+function fetchFromCache(param) {
+  return new Promise((function (resolve, param) {
+                setTimeout((function (param) {
+                        return resolve("foo");
+                      }), 10);
+                return /* () */0;
+              }));
+}
+
+function fetchFromDb(param) {
+  return new Promise((function (resolve, param) {
+                setTimeout((function (param) {
+                        return resolve("bar");
+                      }), 10);
+                return /* () */0;
+              }));
+}
+
+var testFn = let_(fetchFromCache(/* () */0), (function (fromCache) {
+        return let_(fetchFromDb(/* () */0), (function (fromDb) {
+                      console.log("FROM CACHE", fromCache);
+                      console.log("FROM DB", fromDb);
+                      return Promise.resolve(/* () */0);
+                    }));
+      }));
+
 var myExternalJs = /* () */0;
 
 exports.myExternalJs = myExternalJs;
@@ -169,4 +201,8 @@ exports.str = str;
 exports.filter = filter;
 exports.map = map;
 exports.App = App;
+exports.Async = Async;
+exports.fetchFromCache = fetchFromCache;
+exports.fetchFromDb = fetchFromDb;
+exports.testFn = testFn;
 /*  Not a pure module */

@@ -146,3 +146,28 @@ ReactDOMRe.renderToElementWithId(
   <App pokemon=pokemonDataTyped />,
   "reason-app",
 );
+
+module Async = {
+  let let_ =
+      (promise: Js.Promise.t('a), continue: 'a => Js.Promise.t('b))
+      : Js.Promise.t('b) =>
+    promise |> Js.Promise.then_(x => continue(x));
+};
+
+let fetchFromCache = (): Js.Promise.t(string) =>
+  Js.Promise.make((~resolve, ~reject as _) =>
+    Js.Global.setTimeout(() => resolve(. "foo"), 10) |> ignore
+  );
+
+let fetchFromDb = (): Js.Promise.t(string) =>
+  Js.Promise.make((~resolve, ~reject as _) =>
+    Js.Global.setTimeout(() => resolve(. "bar"), 10) |> ignore
+  );
+
+let testFn: Js.Promise.t(unit) = {
+  let%Async fromCache = fetchFromCache();
+  let%Async fromDb = fetchFromDb();
+  Js.log2("FROM CACHE", fromCache);
+  Js.log2("FROM DB", fromDb);
+  Js.Promise.resolve();
+};
