@@ -9,10 +9,29 @@ var Caml_js_exceptions = require("bs-platform/lib/js/caml_js_exceptions.js");
 var app = Express.express(/* () */0);
 
 Express.App[/* get */4](app, "/", Express.Middleware[/* from */5]((function (param, param$1) {
-            var partial_arg = Express.$$Response[/* sendString */2];
-            return (function (param) {
-                return partial_arg("Hello bs-express", param);
-              });
+            try {
+              return Js_exn.raiseError("YIKES");
+            }
+            catch (raw_exn){
+              var exn = Caml_js_exceptions.internalToOCamlException(raw_exn);
+              if (exn[0] === Js_exn.$$Error) {
+                var match = exn[1].stack;
+                if (match !== undefined) {
+                  var partial_arg = "Error: " + (String(match) + "");
+                  var partial_arg$1 = Express.$$Response[/* sendString */2];
+                  return (function (param) {
+                      return partial_arg$1(partial_arg, param);
+                    });
+                } else {
+                  var partial_arg$2 = Express.$$Response[/* sendString */2];
+                  return (function (param) {
+                      return partial_arg$2("An unknown error occurred", param);
+                    });
+                }
+              } else {
+                throw exn;
+              }
+            }
           })));
 
 function onListen(e) {

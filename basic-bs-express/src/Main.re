@@ -3,7 +3,17 @@ open Express;
 let app = express();
 
 App.get(app, ~path="/") @@
-Middleware.from((_, _) => Response.sendString("Hello bs-express"));
+Middleware.from((_, _) => 
+  try (
+    Js.Exn.raiseError("YIKES")
+  ) {
+    | Js.Exn.Error(e) =>
+      switch (Js.Exn.stack(e)) {
+      | Some(trace) => Response.sendString({j|Error: $trace|j})
+      | None => Response.sendString("An unknown error occurred")
+      }
+  }
+);
 
 let onListen = e =>
   switch (e) {
