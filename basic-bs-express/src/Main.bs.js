@@ -4,11 +4,25 @@
 var Js_exn = require("bs-platform/lib/js/js_exn.js");
 var Express = require("bs-express/src/Express.js");
 var Process = require("process");
+var Pg$BasicBsExpress = require("./Pg.bs.js");
 var Caml_js_exceptions = require("bs-platform/lib/js/caml_js_exceptions.js");
 
 var app = Express.express(/* () */0);
 
-Express.App[/* get */4](app, "/", Express.Middleware[/* from */5]((function (param, param$1) {
+var connectionString = "postgresql://postgres:[password]@localhost:5432/ig_clone";
+
+var client = Pg$BasicBsExpress.makeClient(connectionString);
+
+Express.App[/* get */4](app, "/", Express.PromiseMiddleware[/* from */0]((function (param, param$1, res) {
+            var myPromise = new Promise((function (resolve, reject) {
+                    return resolve("sup, my dude");
+                  }));
+            return myPromise.then((function (value) {
+                          return Promise.resolve(Express.$$Response[/* sendString */2](value, res));
+                        }));
+          })));
+
+Express.App[/* get */4](app, "/error-test", Express.Middleware[/* from */5]((function (param, param$1) {
             try {
               return Js_exn.raiseError("YIKES");
             }
@@ -61,5 +75,7 @@ function onListen(e) {
 Express.App[/* listen */21](app, 3000, onListen, /* () */0);
 
 exports.app = app;
+exports.connectionString = connectionString;
+exports.client = client;
 exports.onListen = onListen;
 /* app Not a pure module */

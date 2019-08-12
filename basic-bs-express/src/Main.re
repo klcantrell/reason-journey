@@ -2,16 +2,29 @@ open Express;
 
 let app = express();
 
+let connectionString = "postgresql://postgres:[password]@localhost:5432/ig_clone";
+
+let client = Pg.makeClient(~connectionString);
+
 App.get(app, ~path="/") @@
-Middleware.from((_, _) => 
-  try (
-    Js.Exn.raiseError("YIKES")
-  ) {
-    | Js.Exn.Error(e) =>
-      switch (Js.Exn.stack(e)) {
-      | Some(trace) => Response.sendString({j|Error: $trace|j})
-      | None => Response.sendString("An unknown error occurred")
-      }
+PromiseMiddleware.from((_, _, res) => {
+  let myPromise = Js.Promise.make((~resolve, ~reject) => resolve(. "sup, my dude"));
+  myPromise
+  |> Js.Promise.then_(value => {
+    res
+    |> Response.sendString(value)
+    |> Js.Promise.resolve
+  });
+});
+
+App.get(app, ~path="/error-test") @@
+Middleware.from((_, _) =>
+  try (Js.Exn.raiseError("YIKES")) {
+  | Js.Exn.Error(e) =>
+    switch (Js.Exn.stack(e)) {
+    | Some(trace) => Response.sendString({j|Error: $trace|j})
+    | None => Response.sendString("An unknown error occurred")
+    }
   }
 );
 
