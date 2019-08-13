@@ -5,17 +5,26 @@ let app = express();
 let connectionString = "postgresql://postgres:[password]@localhost:5432/ig_clone";
 
 let client = Pg.makeClient(~connectionString);
+client->Pg.connect;
 
 App.get(app, ~path="/") @@
-PromiseMiddleware.from((_, _, res) => {
-  let myPromise = Js.Promise.make((~resolve, ~reject) => resolve(. "sup, my dude"));
-  myPromise
-  |> Js.Promise.then_(value => {
-    res
-    |> Response.sendString(value)
-    |> Js.Promise.resolve
-  });
-});
+PromiseMiddleware.from((_, _, res) =>
+  Js.Promise.(
+    client->Pg.query("select version()")
+    |> then_(data => {
+         Js.log(data->Pg.rowsGet);
+         resolve(data->Pg.rowsGet);
+       })
+    |> then_(value => {
+         client->Pg.endConnection;
+         res |> Response.sendString(value) |> resolve;
+       })
+    |> catch(err => {
+         Js.log(err);
+         res |> Response.sendString("damn it") |> resolve;
+       })
+  )
+);
 
 App.get(app, ~path="/error-test") @@
 Middleware.from((_, _) =>

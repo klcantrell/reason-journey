@@ -13,12 +13,18 @@ var connectionString = "postgresql://postgres:[password]@localhost:5432/ig_clone
 
 var client = Pg$BasicBsExpress.makeClient(connectionString);
 
+client.connect();
+
 Express.App[/* get */4](app, "/", Express.PromiseMiddleware[/* from */0]((function (param, param$1, res) {
-            var myPromise = new Promise((function (resolve, reject) {
-                    return resolve("sup, my dude");
-                  }));
-            return myPromise.then((function (value) {
-                          return Promise.resolve(Express.$$Response[/* sendString */2](value, res));
+            return client.query("select version()").then((function (data) {
+                              console.log(data.rows);
+                              return Promise.resolve(data.rows);
+                            })).then((function (value) {
+                            client.end();
+                            return Promise.resolve(Express.$$Response[/* sendString */2](value, res));
+                          })).catch((function (err) {
+                          console.log(err);
+                          return Promise.resolve(Express.$$Response[/* sendString */2]("damn it", res));
                         }));
           })));
 
