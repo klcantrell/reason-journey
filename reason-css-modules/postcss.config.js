@@ -6,5 +6,6 @@ module.exports = {
         'nesting-rules': true,
       },
     },
+    'postcss-import': {},
   },
 };

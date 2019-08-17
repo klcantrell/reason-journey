@@ -1,7 +1,9 @@
+@import "Theme.css";
+
 .app {
   font-size: 32px;
 
   & p {
-    color: blue;
+    color: var(--secondary-color);
   }
 }

@@ -3,7 +3,13 @@
 
 var React = require("react");
 var AppCss = require("./App.css");
-var GlobalCss = require("./global.css");
+var GlobalCss = require("./Global.css");
+
+function str(prim) {
+  return prim;
+}
+
+var globalStyles = GlobalCss;
 
 var styles = AppCss;
 
@@ -17,15 +23,14 @@ function App(Props) {
   return React.createElement("div", {
               className: styles.app,
               onClick: handleClick
-            }, message, React.createElement("p", undefined, "This should be blue"));
+            }, message, React.createElement("p", undefined, "This should be the secondary color"));
 }
-
-var globalStyles = /* () */0;
 
 var make = App;
 
+exports.str = str;
 exports.globalStyles = globalStyles;
 exports.styles = styles;
 exports.handleClick = handleClick;
 exports.make = make;
-/*  Not a pure module */
+/* globalStyles Not a pure module */
