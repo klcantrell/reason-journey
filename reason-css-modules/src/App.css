@@ -1,0 +1,7 @@
+.app {
+  font-size: 32px;
+
+  & p {
+    color: blue;
+  }
+}
