@@ -1,0 +1,30 @@
+.base {
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 1.4rem;
+  outline: none;
+}
+
+.purple {
+  background-color: rgb(197, 112, 197);
+  border-color: rgb(114, 207, 114);
+  color: rgb(255, 255, 255);
+}
+
+.green {
+  background-color: rgb(114, 207, 114);
+  border-color: rgb(197, 112, 197);
+  color: rgb(255, 255, 255);
+}
+
+.small {
+  font-size: 1rem;
+  padding: 2px 4px;
+}
+
+.medium {}
+
+.large {
+  font-size: 2rem;
+  padding: 10px 20px;
+}

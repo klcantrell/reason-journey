@@ -3,13 +3,11 @@
 
 var React = require("react");
 var AppCss = require("./App.css");
-var GlobalCss = require("./Global.css");
+var Button$ReactHooksTemplate = require("./Button.bs.js");
 
 function str(prim) {
   return prim;
 }
-
-var globalStyles = GlobalCss;
 
 var styles = AppCss;
 
@@ -23,14 +21,17 @@ function App(Props) {
   return React.createElement("div", {
               className: styles.app,
               onClick: handleClick
-            }, message, React.createElement("p", undefined, "This should be the secondary color"));
+            }, message, React.createElement("p", undefined, "This should be the secondary color"), React.createElement(Button$ReactHooksTemplate.make, {
+                  children: "Sup",
+                  color: /* Green */756711075,
+                  size: /* Large */48800667
+                }));
 }
 
 var make = App;
 
 exports.str = str;
-exports.globalStyles = globalStyles;
 exports.styles = styles;
 exports.handleClick = handleClick;
 exports.make = make;
-/* globalStyles Not a pure module */
+/* styles Not a pure module */

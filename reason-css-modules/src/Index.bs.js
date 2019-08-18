@@ -3,10 +3,14 @@
 
 var React = require("react");
 var ReactDOMRe = require("reason-react/src/ReactDOMRe.js");
+var GlobalCss = require("./Global.css");
 var App$ReactHooksTemplate = require("./App.bs.js");
+
+var globalStyles = GlobalCss;
 
 ReactDOMRe.renderToElementWithId(React.createElement(App$ReactHooksTemplate.make, {
           message: "Hello! Click this text."
         }), "index1");
 
-/*  Not a pure module */
+exports.globalStyles = globalStyles;
+/* globalStyles Not a pure module */
