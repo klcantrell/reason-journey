@@ -2,22 +2,15 @@
 'use strict';
 
 var $$Array = require("bs-platform/lib/js/array.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ButtonCss = require("./Button.css");
+var Caml_exceptions = require("bs-platform/lib/js/caml_exceptions.js");
+
+var NoSuchStyle = Caml_exceptions.create("Button-ReactHooksTemplate.NoSuchStyle");
 
 var styles = ButtonCss;
-
-function make(classes) {
-  return $$Array.fold_left((function (acc, class_) {
-                if (acc === "") {
-                  return acc + class_;
-                } else {
-                  return acc + (" " + class_);
-                }
-              }), "", classes);
-}
-
-var Cx = /* module */[/* make */make];
 
 function styleOfColor(color) {
   if (color >= 756711075) {
@@ -49,6 +42,55 @@ function styleOfSize(size) {
   }
 }
 
+function composeStyles(classes) {
+  return $$Array.fold_left((function (acc, class_) {
+                if (acc === "") {
+                  return acc + class_;
+                } else {
+                  return acc + (" " + class_);
+                }
+              }), "", classes);
+}
+
+function unwrapNullableStyle(style) {
+  if (style == null) {
+    throw NoSuchStyle;
+  } else {
+    return style;
+  }
+}
+
+function extractStylesWithSource(param) {
+  switch (param.tag | 0) {
+    case 0 : 
+        return param[0];
+    case 1 : 
+        return styleOfColor(param[0]);
+    case 2 : 
+        return styleOfSize(param[0]);
+    
+  }
+}
+
+function extractStyle(styleSource, styles) {
+  switch (styleSource.tag | 0) {
+    case 0 : 
+        return unwrapNullableStyle(Curry._1(extractStylesWithSource(/* CssModule */Block.__(0, [styleSource[0]])), styles));
+    case 1 : 
+        return unwrapNullableStyle(Curry._1(extractStylesWithSource(/* ColorProp */Block.__(1, [styleSource[0]])), styles));
+    case 2 : 
+        return unwrapNullableStyle(Curry._1(extractStylesWithSource(/* SizeProp */Block.__(2, [styleSource[0]])), styles));
+    
+  }
+}
+
+var Cx = /* module */[
+  /* composeStyles */composeStyles,
+  /* unwrapNullableStyle */unwrapNullableStyle,
+  /* extractStylesWithSource */extractStylesWithSource,
+  /* extractStyle */extractStyle
+];
+
 function Button(Props) {
   var children = Props.children;
   var match = Props.color;
@@ -56,19 +98,22 @@ function Button(Props) {
   var match$1 = Props.size;
   var size = match$1 !== undefined ? match$1 : /* Medium */861718677;
   return React.createElement("button", {
-              className: make(/* array */[
-                    styles.base,
-                    styleOfColor(color)(styles),
-                    styleOfSize(size)(styles)
+              className: composeStyles(/* array */[
+                    extractStyle(/* CssModule */Block.__(0, [(function (prim) {
+                                return prim.base;
+                              })]), styles),
+                    extractStyle(/* ColorProp */Block.__(1, [color]), styles),
+                    extractStyle(/* SizeProp */Block.__(2, [size]), styles)
                   ])
             }, children);
 }
 
-var make$1 = Button;
+var make = Button;
 
+exports.NoSuchStyle = NoSuchStyle;
 exports.styles = styles;
-exports.Cx = Cx;
 exports.styleOfColor = styleOfColor;
 exports.styleOfSize = styleOfSize;
-exports.make = make$1;
+exports.Cx = Cx;
+exports.make = make;
 /* styles Not a pure module */
