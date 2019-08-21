@@ -19,6 +19,9 @@ let extractNullableStyle = style => {
   };
 };
 
+let extractSingleStyle = (styleGetter, styles) =>
+  styles |> styleGetter |> extractNullableStyle;
+
 let extractStyles = (styleGetters, styles) =>
   styleGetters
   |> List.map(styleGetter => styles |> styleGetter |> extractNullableStyle)

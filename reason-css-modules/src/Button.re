@@ -1,12 +1,6 @@
-[@bs.deriving {abstract: light}]
-type style = {
-  base: Js.Nullable.t(string),
-  purple: Js.Nullable.t(string),
-  green: Js.Nullable.t(string),
-  small: Js.Nullable.t(string),
-  medium: Js.Nullable.t(string),
-  large: Js.Nullable.t(string),
-};
+open ButtonStyles;
+
+type style = ButtonStyles.t;
 
 [@bs.module] [@bs.val] external styles: style = "./Button.css";
 
@@ -29,11 +23,13 @@ let styleOfSize = (size: size) =>
 
 [@react.component]
 let make = (~children, ~color: color=`Purple, ~size: size=`Medium) =>
-  <button
-    className={
-      styles
-      |> Cx.extractStyles([base, styleOfColor(color), styleOfSize(size)])
-      |> Cx.composeStyles
-    }>
-    children
-  </button>;
+  <div className={styles |> Cx.extractSingleStyle(buttonContainer)}>
+    <button
+      className={
+        styles
+        |> Cx.extractStyles([base, styleOfColor(color), styleOfSize(size)])
+        |> Cx.composeStyles
+      }>
+      children
+    </button>
+  </div>;

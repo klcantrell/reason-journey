@@ -43,20 +43,24 @@ function Button(Props) {
   var color = match !== undefined ? match : /* Purple */639527516;
   var match$1 = Props.size;
   var size = match$1 !== undefined ? match$1 : /* Medium */861718677;
-  return React.createElement("button", {
-              className: Cx$ReactHooksTemplate.composeStyles(Cx$ReactHooksTemplate.extractStyles(/* :: */[
-                        (function (prim) {
-                            return prim.base;
-                          }),
-                        /* :: */[
-                          styleOfColor(color),
-                          /* :: */[
-                            styleOfSize(size),
-                            /* [] */0
-                          ]
-                        ]
-                      ], styles))
-            }, children);
+  return React.createElement("div", {
+              className: Cx$ReactHooksTemplate.extractSingleStyle((function (prim) {
+                      return prim.buttonContainer;
+                    }), styles)
+            }, React.createElement("button", {
+                  className: Cx$ReactHooksTemplate.composeStyles(Cx$ReactHooksTemplate.extractStyles(/* :: */[
+                            (function (prim) {
+                                return prim.base;
+                              }),
+                            /* :: */[
+                              styleOfColor(color),
+                              /* :: */[
+                                styleOfSize(size),
+                                /* [] */0
+                              ]
+                            ]
+                          ], styles))
+                }, children));
 }
 
 var make = Button;

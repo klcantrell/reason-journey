@@ -26,6 +26,10 @@ function extractNullableStyle(style) {
   }
 }
 
+function extractSingleStyle(styleGetter, styles) {
+  return extractNullableStyle(Curry._1(styleGetter, styles));
+}
+
 function extractStyles(styleGetters, styles) {
   return $$Array.of_list(List.map((function (styleGetter) {
                     return extractNullableStyle(Curry._1(styleGetter, styles));
@@ -35,5 +39,6 @@ function extractStyles(styleGetters, styles) {
 exports.NoSuchStyle = NoSuchStyle;
 exports.composeStyles = composeStyles;
 exports.extractNullableStyle = extractNullableStyle;
+exports.extractSingleStyle = extractSingleStyle;
 exports.extractStyles = extractStyles;
 /* No side effect */

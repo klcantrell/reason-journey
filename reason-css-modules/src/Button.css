@@ -28,3 +28,8 @@
   font-size: 2rem;
   padding: 10px 20px;
 }
+
+.buttonContainer {
+  width: fit-content;
+  box-shadow: 1px 0px 20px rgb(197, 112, 197);
+}
