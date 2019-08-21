@@ -1,17 +1,18 @@
 {
-  "name": "parsing-css",
+  "name": "cmb",
   "version": "1.0.0",
-  "description": "",
+  "description": "Automatically create ReasonML bindings for your CSS modules classnames",
   "main": "index.js",
-  "scripts": {
-    "build:dev": "webpack -w"
-  },
+  "scripts": {},
   "keywords": [],
-  "author": "",
+  "author": "Kalalau Cantrell",
   "license": "ISC",
   "dependencies": {
     "chokidar": "^3.0.2",
     "css": "^2.2.4",
-    "nodemon": "^1.19.1"
+    "minimist": "^1.2.0"
+  },
+  "bin": {
+    "cmb": "index.js"
   }
 }

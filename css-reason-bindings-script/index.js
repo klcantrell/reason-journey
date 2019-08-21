@@ -3,7 +3,48 @@ const path = require('path');
 const chokidar = require('chokidar');
 const css = require('css');
 
-console.log('Listening for changes in css');
+const argv = require('minimist')(process.argv.slice(2), {
+  string: 'path',
+  boolean: 'help',
+  alias: {
+    p: 'path',
+    h: 'help',
+  },
+  default: {
+    path: '.',
+    help: false,
+  },
+  unknown: unknownArg => {
+    console.log(
+      `Sorry, ${unknownArg} is an unrecognized argument!  Please try again.`
+    );
+    process.exit(1);
+  },
+});
+
+if (argv.help) {
+  console.log(argv);
+  console.log(`
+    Use the --path (alias -p) argument to specify a path to watch your css files
+
+    Example:
+    genStyleTypes --path styles
+
+    The above example will watch the styles directory of your project
+  `);
+  process.exit(0);
+}
+
+const pathArg = path.resolve(argv.path);
+
+if (!fs.existsSync(pathArg)) {
+  console.log(`Sorry, the path ${pathArg} does not exist!  Please try again.`);
+  process.exit(1);
+}
+
+process.chdir(pathArg);
+
+console.log(`Listening for css changes in ${pathArg}`);
 
 chokidar.watch('**/*.css').on('change', (path_, event) => {
   console.log(`Detected change in ${path_}`);
@@ -17,22 +58,28 @@ chokidar.watch('**/*.css').on('change', (path_, event) => {
   }
 });
 
-const makeReasonBindings = (path, rules) => {
-  const filename = makeFilename(path);
-  const precedingPath = extractPrecedingPath(path);
+const makeReasonBindings = (path_, rules) => {
+  const filename = makeFilename(path_);
+  const precedingPath = extractPrecedingPath(path_);
   const ruleTypes = makeRuleTypes(rules);
   const content = makeContent(ruleTypes);
-  const newFilePath = precedingPath + '\\' + filename;
+  const newFilePath = precedingPath
+    ? precedingPath + '\\' + filename
+    : filename;
 
   console.log(`Creating file ${filename}...`);
 
-  writeFile(newFilePath, content);
+  writeFile(path.join(newFilePath), content);
 };
 
 const makeFilename = path => {
   const fragments = path.split('\\');
   const filename = fragments[fragments.length - 1].split('.')[0];
-  return filename.charAt(0).toUpperCase() + filename.slice(1).toLowerCase() + 'Styles.re'extractPrecedingPath
+  return (
+    filename.charAt(0).toUpperCase() +
+    filename.slice(1).toLowerCase() +
+    'Styles.re'
+  );
 };
 
 const makeRuleTypes = rules =>
