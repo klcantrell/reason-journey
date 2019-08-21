@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
 const path = require('path');
 const chokidar = require('chokidar');
@@ -23,12 +25,11 @@ const argv = require('minimist')(process.argv.slice(2), {
 });
 
 if (argv.help) {
-  console.log(argv);
   console.log(`
     Use the --path (alias -p) argument to specify a path to watch your css files
 
     Example:
-    genStyleTypes --path styles
+    cmb --path styles
 
     The above example will watch the styles directory of your project
   `);
