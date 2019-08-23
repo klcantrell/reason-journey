@@ -2,10 +2,8 @@
 'use strict';
 
 var React = require("react");
-var ButtonCss = require("./Button.css");
 var Cx$ReactHooksTemplate = require("./Cx.bs.js");
-
-var styles = ButtonCss;
+var ButtonStyles$ReactHooksTemplate = require("./ButtonStyles.bs.js");
 
 function styleOfColor(color) {
   if (color >= 756711075) {
@@ -46,7 +44,7 @@ function Button(Props) {
   return React.createElement("div", {
               className: Cx$ReactHooksTemplate.extractSingleStyle((function (prim) {
                       return prim.buttonContainer;
-                    }), styles)
+                    }), ButtonStyles$ReactHooksTemplate.externalStyles)
             }, React.createElement("button", {
                   className: Cx$ReactHooksTemplate.composeStyles(Cx$ReactHooksTemplate.extractStyles(/* :: */[
                             (function (prim) {
@@ -59,9 +57,11 @@ function Button(Props) {
                                 /* [] */0
                               ]
                             ]
-                          ], styles))
+                          ], ButtonStyles$ReactHooksTemplate.externalStyles))
                 }, children));
 }
+
+var styles = ButtonStyles$ReactHooksTemplate.externalStyles;
 
 var make = Button;
 
@@ -69,4 +69,4 @@ exports.styles = styles;
 exports.styleOfColor = styleOfColor;
 exports.styleOfSize = styleOfSize;
 exports.make = make;
-/* styles Not a pure module */
+/* react Not a pure module */

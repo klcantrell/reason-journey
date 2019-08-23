@@ -60,17 +60,24 @@ chokidar.watch('**/*.css').on('change', (path_, event) => {
 });
 
 const makeReasonBindings = (path_, rules) => {
-  const filename = makeFilename(path_);
+  const originalFilename = extractOriginalFilename(path_);
+  const newFilename = makeFilename(path_);
   const precedingPath = extractPrecedingPath(path_);
   const ruleTypes = makeRuleTypes(rules);
-  const content = makeContent(ruleTypes);
+  const content = makeContent(ruleTypes, originalFilename);
   const newFilePath = precedingPath
-    ? precedingPath + '\\' + filename
-    : filename;
+    ? precedingPath + '\\' + newFilename
+    : newFilename;
 
-  console.log(`Creating file ${filename}...`);
+  console.log(`Creating file ${newFilename}...`);
 
   writeFile(path.join(newFilePath), content);
+};
+
+const extractOriginalFilename = path => {
+  const fragments = path.split('\\');
+  const filename = fragments[fragments.length - 1];
+  return filename;
 };
 
 const makeFilename = path => {
@@ -88,12 +95,14 @@ const makeRuleTypes = rules =>
     .map(rule => `${rule.slice(1)}: Js.Nullable.t(string),`)
     .reduce((str, rule) => str + '\n\t\t' + rule);
 
-const makeContent = ruleTypes => {
+const makeContent = (ruleTypes, externalFilename) => {
   return ` // GENERATED CONTENT - PLEASE DO NOT EDIT
   [@bs.deriving {abstract: light}]
   type t = {
     ${ruleTypes}
   };
+
+  [@bs.module] [@bs.val] external externalStyles: t = "./${externalFilename}";
 `;
 };
 

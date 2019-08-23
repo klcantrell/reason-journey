@@ -2,7 +2,7 @@ open ButtonStyles;
 
 type style = ButtonStyles.t;
 
-[@bs.module] [@bs.val] external styles: style = "./Button.css";
+let styles = ButtonStyles.externalStyles;
 
 type color = [ | `Purple | `Green];
 

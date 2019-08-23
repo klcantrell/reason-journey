@@ -1,5 +1,5 @@
 {
-  "name": "reason-with-emotion",
+  "name": "reason-css-modules",
   "version": "0.1.0",
   "scripts": {
     "build": "bsb -make-world",
