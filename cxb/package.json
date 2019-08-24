@@ -1,0 +1,26 @@
+{
+  "name": "cxb",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "webpack": "webpack -w"
+  },
+  "keywords": [
+    "BuckleScript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "bs-platform": "^5.0.6",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7"
+  },
+  "bin": {
+    "cxb": "dist/bundle.js"
+  }
+}
