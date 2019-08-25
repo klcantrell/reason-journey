@@ -18,17 +18,24 @@ var $$default = {
   help: false
 };
 
+var string = /* array */["path"];
+
+var $$boolean = /* array */["help"];
+
+function unknown(err) {
+  console.log(err);
+  return /* () */0;
+}
+
 var Minimist = Minimist$Cxb.Make(/* module */[
       /* alias */alias,
-      /* default */$$default
+      /* default */$$default,
+      /* string */string,
+      /* boolean */$$boolean,
+      /* unknown */unknown
     ]);
 
-var options = Curry._3(Minimist[/* makeOptions */0], "path", "help", (function (err) {
-        console.log(err);
-        return /* () */0;
-      }));
-
-console.log(Curry._2(Minimist[/* parse */1], options, /* array */[
+console.log(Curry._1(Minimist[/* parse */0], /* array */[
           "--path",
           "dude"
         ]));
@@ -40,6 +47,5 @@ console.log($$Array.map((function (rule) {
           }), myCss.stylesheet.rules));
 
 exports.Minimist = Minimist;
-exports.options = options;
 exports.myCss = myCss;
 /* Minimist Not a pure module */

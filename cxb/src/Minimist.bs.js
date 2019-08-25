@@ -3,38 +3,17 @@
 
 var Minimist = require("minimist");
 
-function Make(Args) {
-  var arg = Args[/* alias */0];
-  var arg$1 = Args[/* default */1];
-  var makeOptions = function (param) {
-    return (function (param$1) {
-        return (function (param$2) {
-            var param$3 = param$1;
-            var param$4 = arg;
-            var param$5 = arg$1;
-            var param$6 = param$2;
-            var prim = param;
-            var prim$1 = param$3;
-            var prim$2 = param$4;
-            var prim$3 = param$5;
-            var prim$4 = param$6;
-            return {
-                    string: prim,
-                    boolean: prim$1,
-                    alias: prim$2,
-                    default: prim$3,
-                    unknown: prim$4
-                  };
-          });
-      });
+function Make(Config) {
+  var parse = function (input) {
+    return Minimist(input, {
+                string: Config[/* string */2],
+                boolean: Config[/* boolean */3],
+                alias: Config[/* alias */0],
+                default: Config[/* default */1],
+                unknown: Config[/* unknown */4]
+              });
   };
-  var parse = function (options, input) {
-    return Minimist(input, options);
-  };
-  return /* module */[
-          /* makeOptions */makeOptions,
-          /* parse */parse
-        ];
+  return /* module */[/* parse */parse];
 }
 
 exports.Make = Make;
