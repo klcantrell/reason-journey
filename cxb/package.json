@@ -14,11 +14,13 @@
   "license": "MIT",
   "devDependencies": {
     "bs-platform": "^5.0.6",
-    "webpack-node-externals": "^1.7.2"
-  },
-  "dependencies": {
+    "webpack-node-externals": "^1.7.2",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7"
+  },
+  "dependencies": {
+    "css": "^2.2.4",
+    "minimist": "^1.2.0"
   },
   "bin": {
     "cxb": "dist/bundle.js"

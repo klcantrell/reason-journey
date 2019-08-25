@@ -6,10 +6,9 @@ module Fs = {
 
   [@bs.module "fs"] external existsSync_: string => bool = "existsSync";
 
-  let existsSync =
-    (. path: path) => {
-      existsSync_(path);
-    };
+  let existsSync = (path: path) => {
+    existsSync_(path);
+  };
 
   [@bs.module "fs"]
   external readFileSync_: (string, string) => string = "readFileSync";
@@ -48,7 +47,7 @@ module Process = {
   type exitCode = int;
   type path = string;
 
-  [@bs.scope "process"] [@bs.val] external argv: string = "argv";
+  [@bs.scope "process"] [@bs.val] external argv: array(string) = "argv";
   [@bs.scope "process"] [@bs.val] external exit: exitCode => unit = "exit";
   [@bs.scope "process"] [@bs.val] external chdir: path => unit = "chdir";
 };

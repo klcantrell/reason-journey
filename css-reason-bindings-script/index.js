@@ -51,7 +51,7 @@ chokidar.watch('**/*.css').on('change', (path_, event) => {
   console.log(`Detected change in ${path_}`);
   const changedCss = fs.readFileSync(path.resolve(path_), 'utf8');
   try {
-    const ast = css.parse(changedCss.toString());
+    const ast = css.parse(changedCss);
     const rules = ast.stylesheet.rules.map(rule => rule.selectors[0]);
     rules.length > 0 && makeReasonBindings(path_, rules);
   } catch (e) {
