@@ -29,3 +29,10 @@ Js.log(
   |> Css.rules
   |> Array.map(rule => (rule |> Css.selectors)[0]),
 );
+
+let watcher = Chokidar.makeWatcher("**/*.css");
+let handleChange = path => {
+  Js.log({j|Detected change in $path|j});
+};
+
+watcher |> Chokidar.onChange(handleChange);

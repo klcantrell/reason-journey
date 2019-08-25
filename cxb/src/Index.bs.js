@@ -6,6 +6,7 @@ var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Knode$Cxb = require("./Knode.bs.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
+var Chokidar$Cxb = require("./Chokidar.bs.js");
 var Minimist$Cxb = require("./Minimist.bs.js");
 
 var alias = {
@@ -46,6 +47,17 @@ console.log($$Array.map((function (rule) {
             return Caml_array.caml_array_get(rule.selectors, 0);
           }), myCss.stylesheet.rules));
 
+var watcher = Chokidar$Cxb.makeWatcher("**/*.css");
+
+function handleChange(path) {
+  console.log("Detected change in " + (String(path) + ""));
+  return /* () */0;
+}
+
+Chokidar$Cxb.onChange(handleChange, watcher);
+
 exports.Minimist = Minimist;
 exports.myCss = myCss;
+exports.watcher = watcher;
+exports.handleChange = handleChange;
 /* Minimist Not a pure module */
