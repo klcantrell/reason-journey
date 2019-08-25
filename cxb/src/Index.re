@@ -1,5 +1,6 @@
 module Minimist =
   Minimist.Make({
+    type output = {. path: string};
     type alias = {
       .
       p: string,
@@ -10,7 +11,7 @@ module Minimist =
       path: string,
       help: bool,
     };
-    type output = {. path: string};
+
     let alias = {"p": "path", "h": "help"};
     let default = {"path": ".", "help": false};
     let string = [|"path"|];

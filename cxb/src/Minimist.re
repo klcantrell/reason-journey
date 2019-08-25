@@ -1,9 +1,9 @@
 type rawInput = array(string);
 
 module type Config = {
+  type output;
   type alias;
   type default;
-  type output;
   let alias: Js.t(alias);
   let default: Js.t(default);
   let string: array(string);
