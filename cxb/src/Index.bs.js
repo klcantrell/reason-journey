@@ -2,13 +2,18 @@
 'use strict';
 
 var Css = require("css");
+var Path = require("path");
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Js_exn = require("bs-platform/lib/js/js_exn.js");
 var Chokidar = require("chokidar");
 var Knode$Cxb = require("./Knode.bs.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
+var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Chokidar$Cxb = require("./Chokidar.bs.js");
 var Minimist$Cxb = require("./Minimist.bs.js");
+var Caml_splice_call = require("bs-platform/lib/js/caml_splice_call.js");
+var Caml_js_exceptions = require("bs-platform/lib/js/caml_js_exceptions.js");
 
 var alias = {
   p: "path",
@@ -24,8 +29,9 @@ var string = /* array */["path"];
 
 var $$boolean = /* array */["help"];
 
-function unknown(err) {
-  console.log(err);
+function unknown(unknownArg) {
+  console.log("Sorry, " + (String(unknownArg) + " is an unrecognized argument! Please try again."));
+  process.exit(0);
   return /* () */0;
 }
 
@@ -37,28 +43,61 @@ var Minimist = Minimist$Cxb.Make(/* module */[
       /* unknown */unknown
     ]);
 
-console.log(Curry._1(Minimist[/* parse */0], /* array */[
-          "--path",
-          "dude"
-        ]));
+var args = Curry._1(Minimist[/* parse */0], process.argv.slice(2, process.argv.length));
 
-var myCss = Css.parse(Knode$Cxb.Fs[/* readFileSync */1]("test.css", "utf8"));
+var match = args.help;
 
-console.log($$Array.map((function (rule) {
-            return Caml_array.caml_array_get(rule.selectors, 0);
-          }), myCss.stylesheet.rules));
+if (match) {
+  console.log("\n      Use the --path (alias -p) argument to specify a path to watch your css files\n\n      Example:\n      cxb --path styles\n\n      The above exmple will watch the styles directory of your project");
+  process.exit(0);
+}
+
+var pathArg = Caml_splice_call.spliceApply(Path.resolve, [args.path]);
+
+var match$1 = Knode$Cxb.Fs[/* existsSync */0](pathArg);
+
+if (!match$1) {
+  console.log("Sorry, the path " + (String(pathArg) + " does not exist! Please try again."));
+}
+
+process.chdir(pathArg);
 
 var watcher = Chokidar.watch("**/*.css");
 
 function handleChange(path) {
   console.log("Detected change in " + (String(path) + ""));
-  return /* () */0;
+  var changedCss = Knode$Cxb.Fs[/* readFileSync */1](Path.resolve(path), "utf8");
+  var exit = 0;
+  var ast;
+  try {
+    ast = Css.parse(changedCss);
+    exit = 1;
+  }
+  catch (raw_exn){
+    var exn = Caml_js_exceptions.internalToOCamlException(raw_exn);
+    if (exn[0] === Js_exn.$$Error) {
+      var reason = Belt_Option.getWithDefault(exn[1].message, "unknown error");
+      console.log("Something went wrong parsing css: " + (String(reason) + (" in " + (String(path) + ""))));
+      return /* () */0;
+    } else {
+      throw exn;
+    }
+  }
+  if (exit === 1) {
+    var rules = $$Array.map((function (rule) {
+            return Caml_array.caml_array_get(rule.selectors, 0);
+          }), ast.stylesheet.rules);
+    console.log(rules);
+    return /* () */0;
+  }
+  
 }
 
 Chokidar$Cxb.onChange(handleChange, watcher);
 
 exports.Minimist = Minimist;
-exports.myCss = myCss;
+exports.args = args;
+exports.pathArg = pathArg;
 exports.watcher = watcher;
 exports.handleChange = handleChange;
 /* Minimist Not a pure module */
