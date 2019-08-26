@@ -35,4 +35,4 @@ let handleChange = path => {
   Js.log({j|Detected change in $path|j});
 };
 
-watcher |> Chokidar.onChange(handleChange);
+watcher |> Chokidar.onChange @@ handleChange;

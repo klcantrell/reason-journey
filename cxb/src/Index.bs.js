@@ -4,6 +4,7 @@
 var Css = require("css");
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var Chokidar = require("chokidar");
 var Knode$Cxb = require("./Knode.bs.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var Chokidar$Cxb = require("./Chokidar.bs.js");
@@ -47,7 +48,7 @@ console.log($$Array.map((function (rule) {
             return Caml_array.caml_array_get(rule.selectors, 0);
           }), myCss.stylesheet.rules));
 
-var watcher = Chokidar$Cxb.makeWatcher("**/*.css");
+var watcher = Chokidar.watch("**/*.css");
 
 function handleChange(path) {
   console.log("Detected change in " + (String(path) + ""));
