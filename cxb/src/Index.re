@@ -2,7 +2,7 @@ module Minimist =
   Minimist.Make({
     type output = {
       .
-      path: array(string),
+      path: string,
       help: bool,
     };
     type alias = {
@@ -22,7 +22,9 @@ module Minimist =
     let boolean = [|"help"|];
     let unknown = unknownArg => {
       Js.log(
-        {j|Sorry, $unknownArg is an unrecognized argument! Please try again.|j},
+        {j|
+Sorry, $unknownArg is an unrecognized argument! Please try again.
+|j},
       );
       Knode.Process.exit(0);
     };
@@ -43,23 +45,32 @@ args##help
       Example:
       cxb --path styles
 
-      The above exmple will watch the styles directory of your project|j},
+      The above exmple will watch the styles directory of your project
+      |j},
     );
     Knode.Process.exit(0);
   }
   : ();
 
-let pathArg = args##path |> Knode.Path.resolve;
+let pathArg = [|args##path|] |> Knode.Path.resolve;
+
+Js.log(args##path);
 
 pathArg |> Knode.Fs.existsSync
   ? ()
   : {
-    Js.log({j|Sorry, the path $pathArg does not exist! Please try again.|j});
+    Js.log(
+      {j|
+Sorry, the path $pathArg does not exist! Please try again.
+|j},
+    );
   };
 
 Knode.Process.chdir(pathArg);
 
-Js.log({j|Listening for changes in $pathArg|j});
+Js.log({j|
+Listening for changes in $pathArg
+|j});
 
 let watcher = Chokidar.makeWatcher("**/*.css");
 
@@ -127,11 +138,13 @@ let writeFile = (path, content) => {
     | exception (Js.Exn.Error(e)) =>
       let reason =
         Js.Exn.message(e)->Belt.Option.getWithDefault("unknown error");
-      Js.log({j|Something went wrong: $reason|j});
+      Js.log({j|
+Something went wrong: $reason
+|j});
     | _ => ()
     }
   );
-  Js.log("File created");
+  Js.log("File created\n");
 };
 
 let makeReasonBindings = (path, rules) => {

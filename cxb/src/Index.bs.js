@@ -30,7 +30,7 @@ var string = /* array */["path"];
 var $$boolean = /* array */["help"];
 
 function unknown(unknownArg) {
-  console.log("Sorry, " + (String(unknownArg) + " is an unrecognized argument! Please try again."));
+  console.log("\nSorry, " + (String(unknownArg) + " is an unrecognized argument! Please try again.\n"));
   process.exit(0);
   return /* () */0;
 }
@@ -48,21 +48,23 @@ var args = Curry._1(Minimist[/* parse */0], process.argv.slice(2, process.argv.l
 var match = args.help;
 
 if (match) {
-  console.log("\n      Use the --path (alias -p) argument to specify a path to watch your css files\n\n      Example:\n      cxb --path styles\n\n      The above exmple will watch the styles directory of your project");
+  console.log("\n      Use the --path (alias -p) argument to specify a path to watch your css files\n\n      Example:\n      cxb --path styles\n\n      The above exmple will watch the styles directory of your project\n      ");
   process.exit(0);
 }
 
-var pathArg = Caml_splice_call.spliceApply(Path.resolve, [args.path]);
+var pathArg = Path.resolve(args.path);
+
+console.log(args.path);
 
 var match$1 = Knode$Cxb.Fs[/* existsSync */0](pathArg);
 
 if (!match$1) {
-  console.log("Sorry, the path " + (String(pathArg) + " does not exist! Please try again."));
+  console.log("\nSorry, the path " + (String(pathArg) + " does not exist! Please try again.\n"));
 }
 
 process.chdir(pathArg);
 
-console.log("Listening for changes in " + (String(pathArg) + ""));
+console.log("\nListening for changes in " + (String(pathArg) + "\n"));
 
 var watcher = Chokidar.watch("**/*.css");
 
@@ -122,14 +124,14 @@ function writeFile(path, content) {
             var exn = Caml_js_exceptions.internalToOCamlException(raw_exn);
             if (exn[0] === Js_exn.$$Error) {
               var reason = Belt_Option.getWithDefault(exn[1].message, "unknown error");
-              console.log("Something went wrong: " + (String(reason) + ""));
+              console.log("\nSomething went wrong: " + (String(reason) + "\n"));
               return /* () */0;
             } else {
               throw exn;
             }
           }
         }));
-  console.log("File created");
+  console.log("File created\n");
   return /* () */0;
 }
 
