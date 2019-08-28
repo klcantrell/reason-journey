@@ -54,8 +54,6 @@ if (match) {
 
 var pathArg = Path.resolve(args.path);
 
-console.log(args.path);
-
 var match$1 = Knode$Cxb.Fs[/* existsSync */0](pathArg);
 
 if (!match$1) {

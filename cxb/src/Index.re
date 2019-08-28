@@ -54,8 +54,6 @@ args##help
 
 let pathArg = [|args##path|] |> Knode.Path.resolve;
 
-Js.log(args##path);
-
 pathArg |> Knode.Fs.existsSync
   ? ()
   : {
